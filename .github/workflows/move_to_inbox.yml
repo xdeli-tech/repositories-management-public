@@ -1,0 +1,27 @@
+name: Move new issues & PR into Inbox
+
+on:
+  issues:
+    types: [assigned, unassigned]
+  pull_request:
+    types: [assigned, unassigned]
+
+env:
+  backlog: 📋 Backlog
+  inbox: 📥 Inbox
+  gh_project_token: ${{ secrets.GHPROJECT_TOKEN }}
+  org: xdeli-tech
+  project_id: 3
+
+jobs: 
+  move_to_inbox:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Move issue to ${{ env.inbox }}
+        uses: leonsteinhaeuser/project-beta-automations@v2.2.1
+        with:
+          gh_token: ${{ env.gh_project_token }}
+          organization: ${{ env.org }}
+          project_id: ${{ env.project_id }}
+          resource_node_id: ${{ github.event.pull_request.node_id || github.event.issue.node_id }}
+          status_value: ${{ env.inbox }} 
